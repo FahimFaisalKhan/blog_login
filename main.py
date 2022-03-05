@@ -23,7 +23,10 @@ port=os.getenv('port')
 ##CONNECT TO DB
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{db_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app,engine_options={"pool_size": 10, "poolclass":QueuePool, "pool_pre_ping":True})
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_size' : 100, 'pool_recycle' : 280}
+app.config['SQLALCHEMY_POOL_SIZE'] = 100
+app.config['SQLALCHEMY_POOL_RECYCLE'] = 280
+db = SQLAlchemy(app)
 
 login_manager=LoginManager()
 login_manager.init_app(app)
