@@ -17,6 +17,8 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 ckeditor = CKEditor(app)
 Bootstrap(app)
 db_path=os.environ.get('DATABASE_URL')
+if db_path.startswith("postgres://"):
+    db_path = db_path.replace("postgres://", "postgresql://", 1)
 
 ##CONNECT TO DB
 app.config['SQLALCHEMY_DATABASE_URI'] = db_path
