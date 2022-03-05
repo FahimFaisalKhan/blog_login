@@ -10,14 +10,15 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, cur
 from forms import CreatePostForm,RegisterForm,LoginForm,CommentForm
 from flask_gravatar import Gravatar
 from functools import wraps
-from decouple import config
-
+import os
+from dotenv import load_dotenv
+load_dotenv()
 app = Flask(__name__)
-app.config['SECRET_KEY'] = config('SECRET_KEY')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 ckeditor = CKEditor(app)
 Bootstrap(app)
-db_path=config('DB')
-port=config('port')
+db_path=os.getenv('DB')
+port=os.getenv('port')
 ##CONNECT TO DB
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{db_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
