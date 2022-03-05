@@ -11,15 +11,13 @@ from forms import CreatePostForm,RegisterForm,LoginForm,CommentForm
 from flask_gravatar import Gravatar
 from functools import wraps
 import os
-from dotenv import load_dotenv
-from sqlalchemy.pool import QueuePool
-load_dotenv()
+
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 ckeditor = CKEditor(app)
 Bootstrap(app)
-db_path=os.getenv('DATABASE_URL')
-port=os.getenv('port')
+db_path=os.environ.get('DATABASE_URL')
+
 ##CONNECT TO DB
 app.config['SQLALCHEMY_DATABASE_URI'] = db_path
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -241,4 +239,4 @@ def delete_post(post_id):
 
 
 if __name__ == "__main__":
-    app.run(host='localhost', port=port,debug=True)
+    app.run(host='localhost', port=5000,debug=True)
