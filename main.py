@@ -5,7 +5,7 @@ from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
+
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import CreatePostForm,RegisterForm,LoginForm,CommentForm
 from flask_gravatar import Gravatar
@@ -39,7 +39,7 @@ gravatar = Gravatar(app,
                     base_url=None)
 ##CONFIGURE TABLES
 
-Base=declarative_base()
+
 class BlogPost(db.Model):
     __tablename__ = "blog_posts"
     id = db.Column(db.Integer, primary_key=True)
