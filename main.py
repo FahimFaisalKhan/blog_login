@@ -23,9 +23,8 @@ port=os.getenv('port')
 ##CONNECT TO DB
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{db_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_size' : 100, 'pool_recycle' : 280}
-app.config['SQLALCHEMY_POOL_SIZE'] = 100
-app.config['SQLALCHEMY_POOL_RECYCLE'] = 280
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_size' : 150, 'pool_recycle' : 600}
+
 db = SQLAlchemy(app)
 
 login_manager=LoginManager()
@@ -45,13 +44,13 @@ class BlogPost(db.Model):
     __tablename__ = "blog_posts"
     id = db.Column(db.Integer, primary_key=True)
     author_id = db.Column(db.Integer, db.ForeignKey('blog_user.id'),nullable=False)
-    parent = relationship('User', backref='blog_posts', lazy=True)
+    parent = relationship('User', back_populates='children', lazy=True)
     title = db.Column(db.String(250), unique=True, nullable=False)
     subtitle = db.Column(db.String(450), nullable=False)
     date = db.Column(db.String(250), nullable=False)
     body = db.Column(db.Text, nullable=False)
     img_url = db.Column(db.String(1000), nullable=False)
-    children=relationship('Comment',backref='blog_posts',lazy=True)
+    children=relationship('Comment',back_populates='parent2',lazy=True)
 
 class User(db.Model,UserMixin):
     __tablename__="blog_user"
@@ -59,16 +58,16 @@ class User(db.Model,UserMixin):
     name=db.Column(db.String(100))
     email=db.Column(db.String(120),unique=True)
     password=db.Column(db.String(1000))
-    children=relationship('BlogPost',backref='blog_user',lazy=True)
-    children2=relationship('Comment',backref='blog_user',lazy=True)
+    children=relationship('BlogPost',back_populates='parent',lazy=True)
+    children2=relationship('Comment',back_populates='parent',lazy=True)
 
 class Comment(db.Model,UserMixin):
     __tablename__="comments"
     id=db.Column(db.Integer,primary_key=True)
     comment_author_id = db.Column(db.Integer, db.ForeignKey('blog_user.id'),nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('blog_posts.id'), nullable=False)
-    parent=relationship('User',backref='comments',lazy=True)
-    parent2=relationship('BlogPost',backref='comments',lazy=True)
+    parent=relationship('User',back_populates='children2',lazy=True)
+    parent2=relationship('BlogPost',back_populates='children',lazy=True)
     text=db.Column(db.Text,nullable=False)
 
 db.create_all()
