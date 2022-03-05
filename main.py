@@ -11,6 +11,8 @@ from forms import CreatePostForm,RegisterForm,LoginForm,CommentForm
 from flask_gravatar import Gravatar
 from functools import wraps
 from decouple import config
+from waitress import serve
+
 import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = config('SECRET_KEY')
