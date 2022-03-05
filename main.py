@@ -18,7 +18,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 ckeditor = CKEditor(app)
 Bootstrap(app)
-db_path=os.getenv('DB')
+db_path=os.getenv('DATABASE_URL')
 port=os.getenv('port')
 ##CONNECT TO DB
 app.config['SQLALCHEMY_DATABASE_URI'] = db_path
