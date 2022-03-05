@@ -12,6 +12,7 @@ from flask_gravatar import Gravatar
 from functools import wraps
 import os
 from dotenv import load_dotenv
+from sqlalchemy.pool import QueuePool
 load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
@@ -22,7 +23,7 @@ port=os.getenv('port')
 ##CONNECT TO DB
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{db_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+db = SQLAlchemy(app,engine_options={"pool_size": 10, "poolclass":QueuePool, "pool_pre_ping":True})
 
 login_manager=LoginManager()
 login_manager.init_app(app)
